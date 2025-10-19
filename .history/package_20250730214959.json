@@ -1,0 +1,46 @@
+{
+  "name": "gxccui-electron",
+  "version": "4.0.0",
+  "description": "The UI for new GXCC.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "dist": "electron-builder --dir"
+  },
+  "author": "Spwaiter",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "31.3.1",
+    "electron-builder": "24.13.3"
+  },
+  "build": {
+    "appId": "com.gxccui.gxccofficial",
+    "productName": "GXCC-UI",
+    "files": [
+      "main.js",
+      "menu.js",
+      "renderder.js",
+      "dialog.js",
+      "preload.js",
+      "index.html",
+      "buttons.css",
+      "icon.ico",
+      "icon.png",
+      "package.json",
+      "toolbar.css",
+      "init.html"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    },
+    "directories": {
+      "output": ".\\GXCC-UI-BUILD"
+    }
+  },
+  "dependencies": {
+    "mica-electron": "^1.5.16"
+  }
+}

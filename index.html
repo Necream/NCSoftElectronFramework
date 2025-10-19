@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+        <link rel="stylesheet" href="buttons.css">
+        <link rel="stylesheet" href="toolbar.css">
+        <title>GXCC</title>
+        <!-- <link rel="shortcut icon" href="./GralleoX logo v2 web.ico"> -->
+        <style>
+            body{
+                overflow        : scroll;
+                /* background-color: #1F1F1F; */
+                user-select     : none;
+                transition      : 500ms;
+            }
+            .initscreen{
+                position               : fixed;
+                text-align             : center;
+                z-index                : 999;
+                background-color       : rgba(0,0,0,1);
+                color                  : white;
+                backdrop-filter        : blur(100px);
+                -webkit-backdrop-filter: blur(100px);
+                filter                 : blur(0px);
+                top                    : 0;
+                left                   : 0;
+                width                  : 100%;
+                height                 : 100%;
+                animation              : initanimation 5s;
+                animation-fill-mode    : forwards;
+            }
+            @keyframes initanimation {
+                40%{
+                    color                  : white;
+                    backdrop-filter        : blur(15px);
+                    -webkit-backdrop-filter: blur(15px);
+                    background-color: rgba(0,0,0,0.7);
+                    filter: blur(0px);
+                }
+                60%{
+                    color                  : white;
+                    backdrop-filter        : blur(15px);
+                    -webkit-backdrop-filter: blur(15px);
+                    filter: blur(50px);
+                }
+                90%{
+                    color                  : rgba(0,0,0,0);
+                    backdrop-filter        : blur(15px);
+                    -webkit-backdrop-filter: blur(15px);
+                    filter: blur(37.5px);
+                }
+                99%{
+                    color: rgba(0,0,0,0);
+                    background-color       : rgba(0,0,0,0);
+                    backdrop-filter        : blur(0px);
+                    -webkit-backdrop-filter: blur(0px);
+                    filter: blur(0px);
+                    z-index: 999;
+                }
+                100%{
+                    color: rgba(0,0,0,0);
+                    background-color       : rgba(0,0,0,0);
+                    backdrop-filter        : blur(0px);
+                    -webkit-backdrop-filter: blur(0px);
+                    filter: blur(0px);
+                    z-index: -1;
+                }
+            }
+            ::-webkit-scrollbar{display: none;}
+            .backgroundimage{
+                position: fixed;
+                top     : 0;
+                left    : 0;
+                right   : 0;
+                width   : 100%;
+                height  : 100%;
+                z-index : -1;
+            }
+            .normaltext{
+                font-size : 18pt;
+                transition: 500ms;
+            }
+            .text{
+                transition: 500ms;
+            }
+            .SettingBackgroundUI{
+                position               : fixed;
+                top                    : 0;
+                left                   : 0;
+                right                  : 0;
+                bottom                 : 0;
+                background-color       : rgba(0,0,0,0);
+                backdrop-filter        : blur(0px);
+                -webkit-backdrop-filter: blur(0px);
+                transform              : rotate(0,1000);
+            }
+            @keyframes SettingBackgroundUIOpen {
+                0%{
+                    background-color       : rgba(0,0,0,0);
+                    backdrop-filter        : blur(0px);
+                    -webkit-backdrop-filter: blur(0px);
+                }
+                100%{
+                    background-color       : rgba(0,0,0,0.5);
+                    backdrop-filter        : blur(15px);
+                    -webkit-backdrop-filter: blur(15px);
+                }
+            }
+            @keyframes SettingBackgroundUIClose {
+                0%{
+                    background-color       : rgba(0,0,0,0.5);
+                    backdrop-filter        : blur(15px);
+                    -webkit-backdrop-filter: blur(15px);
+                }
+                100%{
+                    background-color       : rgba(0,0,0,0);
+                    backdrop-filter        : blur(0px);
+                    -webkit-backdrop-filter: blur(0px);
+                }
+            }
+            .SettingBlockUI{
+                position               : fixed;
+                top                    : 15%;
+                left                   : 0;
+                right                  : 0;
+                bottom                 : -100px;
+                background-color       : rgba(255,255,255,0.7);
+                border-radius          : 40px 40px 0 0;
+                backdrop-filter        : blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+            }
+            @keyframes SettingBlockUIOpen {
+                0%{
+                    transform: translate(0,100%);
+                }
+                100%{
+                    transform: translate(0,0);
+                }
+            }
+            @keyframes SettingBlockUIClose {
+                0%{
+                    transform: translate(0,0);
+                }
+                100%{
+                    transform: translate(0,100%);
+                }
+            }
+            .SettingInfoUI{
+                position    : fixed;
+                overflow    : auto;
+                height      : calc(95% - 100px);
+                width       : calc(100% - 80px);
+                margin-top  : 5%;
+                margin-left : 5%;
+                margin-right: 5%;
+            }
+            #ToolF2File, #ToolF2Program, #ToolF2Advanced {
+                display: flex; /* 确保它们在 flexbox 中水平排列 */
+                max-width: 250px; /* 设置初始最大宽度 */
+                opacity: 1; /* 初始透明度 */
+                overflow: hidden; /* 隐藏溢出内容 */
+                transition: max-width 0.5s ease, opacity 0.5s ease; /* 添加过渡效果 */
+            }
+            #ToolF1 {
+                display: flex; /* 使用 flexbox 布局 */
+                align-items: center; /* 垂直居中对齐 */
+                max-width: 250px; /* 初始最大宽度为0 */
+                opacity: 1; /* 初始透明度为0 */
+                overflow: hidden; /* 隐藏溢出内容 */
+                transition: max-width 0.5s ease, opacity 0.5s ease; /* 添加过渡效果 */
+            }
+            .transformbackground{
+                background-color: black;
+                filter: blur(10px);
+                z-index: -1;  /*800*/
+                transition: all 1s;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Hello World!</p>
+    </body>
+    <script>
+        function ShowMessageBalloonUI(){
+            var SettingUIElement                         = document.getElementById('ShowMessageBalloonStateBox');
+                SettingUIElement.style.animation         = 'SettingBlockUIOpen 0.7s cubic-bezier(.4,1.17,.68,1)';
+                SettingUIElement.style.animationFillMode = 'forwards';
+                SettingUIElement.style.display           = 'block';
+                SettingUIElement                         = document.getElementById('ShowMessageBalloonStateBackground');
+                SettingUIElement.style.animation         = 'SettingBackgroundUIOpen 0.7s ease-out';
+                SettingUIElement.style.animationFillMode = 'forwards';
+                SettingUIElement.style.display           = 'block';
+            sendMessageToMain('GetShowMessageState');
+        }
+        function HideMessageBalloonUI(){
+            var SettingUIElement                         = document.getElementById('ShowMessageBalloonStateBox');
+                SettingUIElement.style.animation         = 'SettingBlockUIClose 0.7s cubic-bezier(.39,.81,1,.99)';
+                SettingUIElement.style.animationFillMode = 'forwards';
+            setTimeout(() => {
+                SettingUIElement.style.display='none';
+            }, 700);
+            SettingUIElement=document.getElementById('ShowMessageBalloonStateBackground');
+            SettingUIElement.style.animation='SettingBackgroundUIClose 0.7s ease-out';
+            setTimeout(() => {
+                SettingUIElement.style.display='none';
+            }, 700);
+        }
+        function HideMessageBalloonUIWithNoAnimation(){
+            var SettingUIElement               = document.getElementById('ShowMessageBalloonStateBox');
+                SettingUIElement.style.display = 'none';
+                SettingUIElement               = document.getElementById('ShowMessageBalloonStateBackground');
+                SettingUIElement.style.display = 'none';
+        }
+        window.ShowMessageBalloonUI=ShowMessageBalloonUI;
+        HideMessageBalloonUIWithNoAnimation();
+        // ShowMessageBalloonUI();
+    </script>
+    <script src="./renderder.js"></script>
+    <script>
+        var colorstyle='';
+        function setTextColor(color) {
+            var elements = document.getElementsByClassName('normaltext');
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.color = color;
+            }
+        }
+
+        function setStarColor(color) {
+            window.starcolor = color; // 设置每颗星星的颜色为传入的 color
+        }
+
+        function setButtonStyle(mode) {
+            var elements = document.getElementsByTagName('button');
+            for (var i = 0; i < elements.length; i++) {
+                if(elements[i].className=='correctbutton'||elements[i].className=='cantbutton'||elements[i].className=='loader'){
+                    console.log('jump'+elements[i].className);
+                }else{
+                    if (mode === 'dark') {
+                        elements[i].className = 'button2';
+                    } else {
+                        elements[i].className = 'button1';
+                    }
+                }
+            }
+        }
+        function setSettingUIColor(color){
+            if(color=='dark'){
+                var element=document.getElementById('ShowMessageBalloonStateBox');
+                element.style.backgroundColor='rgba(0,0,0,0.7)';
+            }else{
+                var element=document.getElementById('ShowMessageBalloonStateBox');
+                element.style.backgroundColor='rgba(255,255,255,0.7)';
+            }
+        }
+        function setLightMode() {
+            document.body.style.backgroundColor = '#FFFFFF';
+            setTextColor('black');
+            setStarColor('rgb(0, 255, 229)');
+            setButtonStyle('light');
+            setSettingUIColor('light');
+            colorstyle='light';
+        }
+        function setDarkMode() {
+            document.body.style.backgroundColor = '#1F1F1F';
+            setTextColor('white');
+            setStarColor('white');
+            setButtonStyle('dark');
+            setSettingUIColor('dark');
+            colorstyle='dark';
+        }
+
+        // 判断当前系统颜色模式并设置初始样式
+        function applyTheme() {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                setDarkMode();
+            } else {
+                setLightMode();
+            }
+        }
+
+        // 监听颜色模式变化
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+            if (e.matches) {
+                setDarkMode();
+            } else {
+                setLightMode();
+            }
+        });
+
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function (e) {
+            if (e.matches) {
+                setLightMode();
+            } else {
+                setDarkMode();
+            }
+        });
+
+        // 设置文字颜色的函数
+
+        // 应用初始主题
+        applyTheme();
+        function changecolorstyle(){
+            if(colorstyle=='light'){
+                setDarkMode();
+            }else{
+                setLightMode();
+            }
+        }
+
+
+        // -----------------
+        function recoverbuttonstyle(element){
+            if (window.colorstyle=='dark') {
+                // setDarkMode();
+                element.className='button2';
+            } else {
+                element.className='button1';
+                // setLightMode();
+            }
+        }
+        function afterreceive(){
+            if(window.ipcReceive=='anymore') return;
+            if(window.ipcReceive=='OK'){
+                window.buttonelement.className='correctbutton';
+            }else{
+                window.buttonelement.className='cantbutton';
+            }
+            window.buttontextelement.innerHTML=window.ipcReceive;
+            setTimeout(() => {
+                window.buttonelement.onclick=window.buttononclick;
+                recoverbuttonstyle(window.buttonelement);
+                window.buttontextelement.innerHTML=window.originaltext;
+                for(var i=0;i<window.buttons.length;i++){
+                    if(window.buttons[i].id===window.buttonid) continue;
+                    window.buttons[i].onclick=window.onclicks[i];
+                    window.buttons[i].style.cursor='pointer';
+                }
+            },2000);
+        }
+        function beforesend(buttonid,buttontextid){
+            // disable other button
+            window.buttons=document.getElementsByTagName('button');
+            window.onclicks=[];
+            for(var i=0;i<window.buttons.length;i++){
+                window.onclicks.push(window.buttons[i].onclick);
+                if(window.buttons[i].id===buttonid||window.buttons[i].id==='changecolorstyle'){
+                }else{
+                    window.buttons[i].onclick='';
+                    window.buttons[i].style.cursor='not-allowed';
+                }
+            }
+            //setup this button
+            window.buttontextelement           = document.getElementById(buttontextid);
+            window.buttonelement               = document.getElementById(buttonid);
+            window.buttonelement.className     = 'loader';
+            window.originaltext                = window.buttontextelement.innerHTML;
+            window.buttontextelement.innerHTML = '稍等一下';
+            window.buttononclick               = window.buttonelement.onclick;
+            window.callback                    = afterreceive;
+            window.buttonelement.onclick       = '';
+        }
+        function OpenTool(){
+            var buttonid='opentoolbutton';
+            var buttontextid='opentoolbuttontext';
+            beforesend(buttonid,buttontextid);
+            setTimeout(() => {
+                sendMessageToMain('open *Tool');
+            },500);
+        }
+        function openpagechange(){
+            window.callback=afterreceive;
+            setTimeout(()=>{
+                sendMessageToMain('open PAGECAGE');
+            },500);
+        }
+        function ChangePage(){
+            var buttonid='changepagebutton';
+            var buttontextid='changepagebuttontext';
+            beforesend(buttonid,buttontextid);
+            window.callback=openpagechange;
+            setTimeout(() => {
+                sendMessageToMain('showmessage 这个功能依赖GXCC-PageChanger，但是目前我们并没有推出此工具。\n\n我们依然会检查并尝试启动工具，如果在你点击确定之后成功启动了更新工具，请忽略此警告');
+            },500);
+        }
+        function OpenAIDriver(){
+            var buttonid='openaidriverbutton';
+            var buttontextid='openaidriverbuttontext';
+            beforesend(buttonid,buttontextid);
+            setTimeout(() => {
+                sendMessageToMain('startwithoutwait /d .\\Extensions\\AIDRIVER\\ .\\Extensions\\AIDRIVER\\AIDriver-Connector-consoleinput.exe');
+            },500);
+        }
+        function openupdater(){
+            window.callback=afterreceive;
+            setTimeout(()=>{
+                sendMessageToMain('open GXUPDATE');
+            },500);
+        }
+        function CheckUpdate(){
+            var buttonid='checkupdatebutton';
+            var buttontextid='checkupdatebuttontext';
+            beforesend(buttonid,buttontextid);
+            window.callback=openupdater;
+            setTimeout(() => {
+                sendMessageToMain('showmessage 这个功能依赖GXCC-Updater，但是目前我们并没有推出此工具。\n\n我们依然会检查并尝试启动工具，如果在你点击确定之后成功启动了更新工具，请忽此警告');
+            },500);
+        }
+        function OpenCore(){
+            var buttonid='opencorebutton';
+            var buttontextid='opencorebuttontext';
+            beforesend(buttonid,buttontextid);
+            setTimeout(() => {
+                sendMessageToMain('open *Core');
+            },500);
+        }
+        function SetShowMessageState(){
+            var element=document.getElementById('showmessagestateinput');
+            var value=element.checked;
+            window.showmessagestateinput=element;
+            console.log(value);
+            if(value==true){
+                value='true';
+            }else{
+                value='false';
+            }
+            sendMessageToMain('SetShowMessageState '+value);
+        }
+        function ShowMoveTip() {
+            var moveTipElement = document.getElementById("movetip");
+            var titleElement = document.getElementById("title");
+
+            // 初始状态设置
+            moveTipElement.style.color = "rgba(66,66,66,0)";
+            moveTipElement.style.display = "none"; // 隐藏移动提示
+
+            // 显示标题
+            titleElement.style.color = "rgba(66,66,66,1)";
+            titleElement.style.display = "block"; // 确保标题可见
+
+            setTimeout(() => {
+                // 隐藏标题
+                titleElement.style.color = "rgba(66,66,66,0)";
+                setTimeout(() => {
+                    titleElement.style.display = "none"; // 隐藏标题
+
+                    // 显示动提示
+                    moveTipElement.style.display = "block";
+                    moveTipElement.style.color = "rgba(66,66,66,1)";
+
+                    setTimeout(() => {
+                        // 隐藏移动提示
+                        moveTipElement.style.color = "rgba(66,66,66,0)";
+                        setTimeout(() => {
+                            moveTipElement.style.display = "none"; // 隐藏移动提示
+                            titleElement.style.display = "block"; // 显示标题
+                            titleElement.style.color = "rgba(66,66,66,1)"; // 恢复标题颜色
+                        }, 500); // 隐藏移动提示后延迟500ms
+                    }, 3500); // 显示移动提示后延迟3500ms
+                }, 500); // 隐藏标题后延迟500ms
+            }, 5500); // 初始延迟5500ms
+        }
+
+        // 调用函数以启动动画
+        ShowMoveTip();
+        const F1list=["file","program","advanced"];
+        var F1Width=[];
+        var F1Margin=[];
+        const toolfloorname=["ToolF2File","ToolF2Program","ToolF2Advanced"];
+        function inittoolbar() {
+            const toolbar = document.getElementById("toolbar"); // 获取工具栏元素
+
+            // 添加滚轮事件以支持水平滚动
+            toolbar.addEventListener('wheel', (event) => {
+                event.preventDefault(); // 防止默认的垂直滚动
+                toolbar.scrollLeft += event.deltaY; // 根据滚轮的垂直滚动量调整水平滚动
+            });
+
+            // 隐藏工具栏中的元素
+            toolfloorname.forEach(elementname => {
+                var element = document.getElementById(elementname);
+                element.style.maxWidth = '0'; // 设置最大宽度为0以实现收起效果
+                element.style.opacity = '0'; // 设置透明度为0以实现淡出效果
+                setTimeout(() => {
+                    // element.style.display = 'none'; // 在动画结束后隐藏元素
+                }, 500); // 等待动画完成后再隐藏
+                console.log("hide ", element);
+            });
+            F1list.forEach(elementname => {
+                var element=document.getElementById(elementname);
+                F1Width.push(element.scrollWidth);
+                element.style.maxWidth=element.scrollWidth;
+                F1Margin.push(element.style.margin);
+            });
+            let i=0;
+            F1list.forEach(elementname => {
+                if (1) {
+                    var otherElement = document.getElementById(elementname);
+                    otherElement.style.maxWidth = '0px'; // 收起其他元素
+                    otherElement.style.opacity = '0';
+                    hideElement(elementname);
+                }
+                if(1){
+                    var otherElement = document.getElementById(elementname);
+                    otherElement.style.backgroundColor = "rgba(200,200,200,0.6)";
+                }
+                if (1) {
+                    var otherElement = document.getElementById(elementname);
+                    otherElement.style.maxWidth = `${F1Width[i]}px`; // 收起其他元素
+                    otherElement.style.opacity = '1';
+                    showElement(elementname,F1Margin[i]);
+                }
+                if(1){
+                    var otherElement = document.getElementById(elementname);
+                    otherElement.style.backgroundColor = "rgba(255,255,255,0)";
+                }
+                i++;
+            });
+        }
+        inittoolbar();
+        function ShowOrHideF2File() {
+            const name = "file";
+            var element = document.getElementById("ToolF2File");
+            const contentWidth = element.scrollWidth; // 获取内容的实际宽度
+
+            if (element.style.maxWidth === '0px' || element.style.maxWidth === '' || element.style.opacity === '0') {
+                element.style.opacity = '1';
+                element.style.maxWidth = `${contentWidth}px`; // 设置为内容的宽度
+                F1list.forEach(elementname => {
+                    if (elementname !== name) {
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.maxWidth = '0px'; // 收起其他元素
+                        otherElement.style.opacity = '0';
+                        hideElement(elementname);
+                    }else{
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.backgroundColor = "rgba(200,200,200,0.6)";
+                    }
+                });
+            } else {
+                element.style.maxWidth = '0px'; // 收起
+                element.style.opacity = '0';
+                var i=0;
+                F1list.forEach(elementname => {
+                    if (elementname !== name) {
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.maxWidth = `${F1Width[i]}px`; // 收起其他元素
+                        otherElement.style.opacity = '1';
+                        showElement(elementname,F1Margin[i]);
+                    }else{
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.backgroundColor = "rgba(255,255,255,0)";
+                    }
+                    i++;
+                });
+            }
+        }
+
+        function ShowOrHideF2Program() {
+            const name = "program";
+            var element = document.getElementById("ToolF2Program");
+            const contentWidth = element.scrollWidth; // 取内容的实宽度
+
+            if (element.style.maxWidth === '0px' || element.style.maxWidth === '' || element.style.opacity === '0') {
+                element.style.opacity = '1';
+                element.style.maxWidth = `${contentWidth}px`; // 设置为内容的宽度
+                F1list.forEach(elementname => {
+                    if (elementname !== name) {
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.maxWidth = '0px'; // 收起其他元素
+                        otherElement.style.opacity = '0';
+                        hideElement(elementname);
+                    }else{
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.backgroundColor = "rgba(200,200,200,0.6)";
+                    }
+                });
+            } else {
+                element.style.maxWidth = '0px'; // 收起
+                element.style.opacity = '0';
+                var i=0;
+                F1list.forEach(elementname => {
+                    if (elementname !== name) {
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.maxWidth = `${F1Width[i]}px`; // 收起其他元素
+                        otherElement.style.opacity = '1';
+                        showElement(elementname,F1Margin[i]);
+                    }else{
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.backgroundColor = "rgba(255,255,255,0)";
+                    }
+                    i++;
+                });
+            }
+        }function ShowOrHideF2Advanced() {
+            const name = "advanced";
+            var element = document.getElementById("ToolF2Advanced");
+            const contentWidth = element.scrollWidth; // 取内容的实宽度
+
+            if (element.style.maxWidth === '0px' || element.style.maxWidth === '' || element.style.opacity === '0') {
+                element.style.opacity = '1';
+                element.style.maxWidth = `${contentWidth}px`; // 设置为内容的宽度
+                F1list.forEach(elementname => {
+                    if (elementname !== name) {
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.maxWidth = '0px'; // 收起其他元素
+                        otherElement.style.opacity = '0';
+                        hideElement(elementname);
+                    }else{
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.backgroundColor = "rgba(200,200,200,0.6)";
+                    }
+                });
+            } else {
+                element.style.maxWidth = '0px'; // 收起
+                element.style.opacity = '0';
+                var i=0;
+                F1list.forEach(elementname => {
+                    if (elementname !== name) {
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.maxWidth = `${F1Width[i]}px`; // 收起其他元素
+                        otherElement.style.opacity = '1';
+                        showElement(elementname,F1Margin[i]);
+                    }else{
+                        var otherElement = document.getElementById(elementname);
+                        otherElement.style.backgroundColor = "rgba(255,255,255,0)";
+                    }
+                    i++;
+                });
+            }
+        }
+        function hideElement(elementname) {
+            var element = document.getElementById(elementname);
+            element.style.margin = '0';
+            element.style.pointerEvents = 'none'; // 禁用点击事件
+        }
+
+        function showElement(elementname,margin_) {
+            var element = document.getElementById(elementname);
+            element.style.margin = margin_;
+            element.style.pointerEvents = 'auto'; // 重新启用点击事件
+        }
+    </script>
+</html>
