@@ -67,8 +67,8 @@ function runcmdwithwindow(command) {
 
 function getdirpath() {
     try {
-        const GXCCpath = fs.readFileSync("C:\\GXCC\\path.txt", 'utf8');
-        return GXCCpath.slice(0, -8); // 去掉最后8个字符
+        const NCSoftpath = fs.readFileSync("C:\\NCSoft\\path.txt", 'utf8');
+        return NCSoftpath.slice(0, -8); // 去掉最后8个字符
     } catch (err) {
         console.error(err);
         return '';
@@ -76,7 +76,7 @@ function getdirpath() {
 }
 
 function getConfigData() {
-    const filepath = path.join(getdirpath(), ".\\Config\\Configs.GXc");
+    const filepath = path.join(getdirpath(), ".\\Config\\Configs.NCc");
     const datafromfile = fs.readFileSync(filepath, 'utf8');
     return JSON.parse(datafromfile);
 }
@@ -216,8 +216,8 @@ async function openTool(operation) {
         }
     } else if (operation === "Core") {
         const dirpath = getdirpath();
-        const filepath = path.join(dirpath, "GXCC_Core.exe");
-        if (isProgramRunning('GXCC_Core.exe')) {
+        const filepath = path.join(dirpath, "NCSoft_Core.exe");
+        if (isProgramRunning('NCSoft_Core.exe')) {
             return 'Already running.';
         }
         startwithoutwait(filepath);
@@ -236,13 +236,13 @@ async function startwithoutwait(operation) {
 
 function GetShowMessageState() {
     const config = getConfigData();
-    return 'SetMessageBalloonState ' + config['GXCCUI']['ShowMessageBalloonState'];
+    return 'SetMessageBalloonState ' + config['NCSoftUI']['ShowMessageBalloonState'];
 }
 
 function SetShowMessageState(operation) {
-    const filepath = path.join(getdirpath(), ".\\Config\\Configs.GXc");
+    const filepath = path.join(getdirpath(), ".\\Config\\Configs.NCc");
     const data = getConfigData();
-    data['GXCCUI']['ShowMessageBalloonState'] = operation;
+    data['NCSoftUI']['ShowMessageBalloonState'] = operation;
     fs.writeFileSync(filepath, JSON.stringify(data, null, 4));
     return 'NOOPERATION_OK';
 }
@@ -250,7 +250,7 @@ function SetShowMessageState(operation) {
 function showmessage(operation) {
     dialog.showMessageBox({
         type: 'info',
-        title: 'GXCC-UI',
+        title: 'NCSoft-UI',
         message: operation,
         buttons: ['OK']
     });
@@ -341,7 +341,7 @@ const createWindow = () => {
             });
             tray.setContextMenu(contextMenu);
             const config = getConfigData();
-            if (config['GXCCUI']['ShowMessageBalloonState'] === 'true') {
+            if (config['NCSoftUI']['ShowMessageBalloonState'] === 'true') {
                 const notification = {
                     title: getProgramName()+'已收起',
                     body: getProgramName()+'并没有退出，而是收起在了托盘中。点击来配置通知设置。',
