@@ -1,3 +1,4 @@
+// NCSoft Electron Framework v2.0.0  See more 
 const { app, Tray, Menu, BrowserWindow, Notification, ipcMain, dialog } = require('electron');
 const fs = require('fs');
 const path = require('node:path');

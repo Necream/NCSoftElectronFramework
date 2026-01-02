@@ -1,10 +1,10 @@
+// NCSoft Electron Framework
 const { app, Tray, Menu, BrowserWindow, Notification, ipcMain, dialog } = require('electron');
 const fs = require('fs');
 const path = require('node:path');
 const { exec, execSync } = require('child_process');
 const { readFileSync } = require('node:fs');
 const { get } = require('node:http');
-const { MicaBrowserWindow } = require('mica-electron');
 
 const commands = [
     "open ",
@@ -164,9 +164,9 @@ function compareoperation(data) {
             app.quit();
             return 'OK';
         case 5:
-            return GetShowMessageState();
+            return 'NO PARED ACTION.';
         case 6:
-            return SetShowMessageState(operation);
+            return 'NO PARED ACTION.';
         case 7:
             return showmessage(operation);
         case 8:
@@ -201,29 +201,6 @@ async function openextension(operation) {
     }
 }
 
-async function openTool(operation) {
-    if (operation === 'Tool') {
-        const config = getConfigData();
-        const extensionId = config['toolid'];
-        const extensionNamePath = path.join(getdirpath(), `Extensions\\${extensionId}\\ExtensionName.etn`);
-        try {
-            const extensionName = fs.readFileSync(extensionNamePath, 'utf8');
-            const extensionPath = path.join(getdirpath(), `Extensions\\${extensionId}\\${extensionName}.exe`);
-            startwithoutwait(extensionPath);
-            return 'OK';
-        } catch (err) {
-            return err.message;
-        }
-    } else if (operation === "Core") {
-        const dirpath = getdirpath();
-        const filepath = path.join(dirpath, "NCSoft_Core.exe");
-        if (isProgramRunning('NCSoft_Core.exe')) {
-            return 'Already running.';
-        }
-        startwithoutwait(filepath);
-        return 'OK';
-    }
-}
 
 async function startwithwait(operation) {
     await runcmdwithwindow('cmd /c '+operation);
@@ -232,19 +209,6 @@ async function startwithwait(operation) {
 async function startwithoutwait(operation) {
     await runcmdwithwindow('cmd /c start '+operation);
     return 'OK';
-}
-
-function GetShowMessageState() {
-    const config = getConfigData();
-    return 'SetMessageBalloonState ' + config['NCSoftUI']['ShowMessageBalloonState'];
-}
-
-function SetShowMessageState(operation) {
-    const filepath = path.join(getdirpath(), ".\\Config\\Configs.NCc");
-    const data = getConfigData();
-    data['NCSoftUI']['ShowMessageBalloonState'] = operation;
-    fs.writeFileSync(filepath, JSON.stringify(data, null, 4));
-    return 'NOOPERATION_OK';
 }
 
 function showmessage(operation) {
@@ -289,14 +253,14 @@ function showDevTools(){
 }
 
 const createWindow = () => {
-    mainWindow = new MicaBrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1000,
         height: 800,
         titleBarStyle: 'hidden',
         titleBarOverlay: {
             height: 50,
             color: "rgba(0,0,0,0)",
-            symbolColor: "rgb(255,255,255)"
+            symbolColor: "rgba(0, 0, 0, 1)"
         },
         // transparent: true,
         webPreferences: {
@@ -341,22 +305,6 @@ const createWindow = () => {
             });
             tray.setContextMenu(contextMenu);
             const config = getConfigData();
-            if (config['NCSoftUI']['ShowMessageBalloonState'] === 'true') {
-                const notification = {
-                    title: getProgramName()+'已收起',
-                    body: getProgramName()+'并没有退出，而是收起在了托盘中。点击来配置通知设置。',
-                    icon: path.join(getdirpath(), 'icon.png')
-                };
-                const notificationbotton = new Notification(notification);
-                notificationbotton.on('click', () => {
-                    mainWindow.show();
-                    if (mainWindow.isMinimized()) mainWindow.restore();
-                    mainWindow.focus();
-                    global.mainWindow.webContents.send('message-from-main', 'ShowMessageBalloonStateUI');
-                    tray.destroy();
-                });
-                notificationbotton.show();
-            }
         } else {
             app.quit();
         }

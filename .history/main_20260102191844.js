@@ -203,11 +203,11 @@ async function openextension(operation) {
 
 
 async function startwithwait(operation) {
-    await runcmdwithwindow('cmd /c "'+operation+'"');
+    await runcmdwithwindow('cmd /c “'+operation);
     return 'OK';
 }
 async function startwithoutwait(operation) {
-    await runcmdwithwindow('cmd /c start "'+operation+'"');
+    await runcmdwithwindow('cmd /c start '+operation);
     return 'OK';
 }
 

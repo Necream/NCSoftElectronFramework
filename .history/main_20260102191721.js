@@ -1,4 +1,4 @@
-// NCSoft Electron Framework v2.0.0  See more information in https://github.com/Necream/NCSoftElectronFramework
+// NCSoft Electron Framework v2.0.0  See more information in https:
 const { app, Tray, Menu, BrowserWindow, Notification, ipcMain, dialog } = require('electron');
 const fs = require('fs');
 const path = require('node:path');
@@ -203,11 +203,11 @@ async function openextension(operation) {
 
 
 async function startwithwait(operation) {
-    await runcmdwithwindow('cmd /c "'+operation+'"');
+    await runcmdwithwindow('cmd /c '+operation);
     return 'OK';
 }
 async function startwithoutwait(operation) {
-    await runcmdwithwindow('cmd /c start "'+operation+'"');
+    await runcmdwithwindow('cmd /c start '+operation);
     return 'OK';
 }
 
